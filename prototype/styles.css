@@ -1,0 +1,69 @@
+.prototype {
+  margin: 10px auto;
+  height: 660px;
+  width: 800px;
+}
+
+#field {
+  height: 600px;
+  width: 100%;
+  position: relative;
+  background: #dbdbdb;
+  padding: 10px;
+}
+[class*="uav"] {
+  position: absolute;
+  cursor: pointer;
+}
+
+#controls {
+  height: 60px;
+  background: #FFFF7A;  
+}
+
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
+
+input, input, select {
+  background-color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 6px;
+  color: black;
+  width: 120px;
+  height: 40px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px 10px;
+  transition-duration: 0.4s;
+  border: 2px solid #e7e7e7;
+  cursor: pointer;
+}
+
+input[type=button]:hover, input[type=reset]:hover, select:hover {
+  background-color: #a3a3c2;
+  color: white;
+}
+
+input:disabled, select:disabled {
+  background: #dddddd;
+}
+
+select {
+  width: 120px;
+}
+
+#uavNumSelector {
+  width: 50px;
+}
+
+#timelabel {
+  width: 80px;
+}
+
+#timelabel:disabled {
+  background-color: dimgray;
+  color: white;
+  font-weight: bold;
+}

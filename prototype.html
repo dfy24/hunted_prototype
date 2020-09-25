@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="content-language" content="en" />
+  <meta http-equiv="Expires" content="now" />
+  <meta name="robots" content="ALL, INDEX, FOLLOW" />
+  <meta name="resource-type" content="document" />
+  <meta name="author" content="Daniel H. Stolfi" />
+  <meta name="distribution" content="Global" />
+  <meta name="description" content="HUNTED: Prototype" />
+  <meta name="keywords" content="project, surveillance, drones, UAV, UGV, trajectories, optimization, evolutionary algorithms" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="geo.region" content="LU" />
+  <meta name="geo.placename" content="Esch-sur-Alzette" />
+  <meta name="geo.position" content="49.503925;5.947803" />
+  <meta name="ICBM" content="49.503925, 5.947803" />
+  <meta name="DC.title" content="HUNTED: Prototype" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="HUNTED - Heterogeneous multi-swarms of UNmanned auTonomous systEms for mission Deployment" />
+  <link rel="stylesheet" href="css/styles.css" type="text/css" />
+  <link rel="stylesheet" href="prototype/styles.css" type="text/css" />
+  <title>HUNTED: Prototype</title>
+  <script language="JavaScript" type="text/javascript" src="js/functions.js"></script>
+</head>
+<style>
+
+    #mainObject {
+        position:absolute;
+        animation-fill-mode: forwards;
+        width:25px;
+        height: 25px;
+        background-color: rgb(0, 0, 0);
+        border-radius: 50%;
+        border: 5px rgb(255, 255, 255) solid;
+
+        /* transform: translate3d(10px, 10px, 0); */
+
+    }
+</style>
+<body onload="init()">
+<noscript><div class="nojs">This page looks better if javascript is enabled in your browser</div></noscript>
+
+<div class="header">
+  <script>html_head();</script>
+</div>
+
+<div class="row">
+  <div class="col-3 col-s-12 menu">
+    <ul>
+      <script>html_menu();</script>
+    </ul>
+  </div>
+
+  <div class="col-9 col-s-12">
+    <div class="text">
+      <h1>Prototype</h1>
+      <p>Work in Progress</p>
+      <div class="prototype">
+            <div id="controls">
+                <input type="button" id="start" value="Start"/>
+                <input type="reset" id="re" value="Reset" onclick="resetDefaultPos()" />
+                UAVs:
+                <select name="numberUavs" id="uavNumSelector" onclick="setNumUavs(this.options[this.selectedIndex].value)">
+                   <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="8">8</option>
+                    <option value="12">12</option>
+                    <option value="16">16</option>
+                </select>
+                Mobility:
+                <select name="mobility" id="mobilitySelector" disabled>
+                   <option value="cromm" selected>CROMM</option>
+                   <option value="cacoc">CACOC</option>
+                </select>
+                Time:
+                <input type="text" id="timelabel" value="0000" disabled/>
+            </div>
+            <div id="field">
+                <!--<div id="contentContainer">
+
+                </div>-->
+            </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script language="JavaScript" type="text/javascript" src="prototype/functions.js"></script>
+<script src="wbapp.js"></script>
+<div class="footer">
+   <script>html_foot();</script>
+</div>
+
+
+</body>
+</html>
