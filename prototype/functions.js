@@ -121,7 +121,6 @@ function getPosition(element) {
     };
 }
 
-
 // Simulation UAVs
 class UAV {
   constructor(id, x, y, angle, speed, field) {
