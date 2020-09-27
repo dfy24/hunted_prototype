@@ -38,11 +38,11 @@ function animate({timing, draw, duration}) {
 }
 
 function getClickPosition(e) {
-    let startBtn = document.querySelector("#start"); 
-	// Do nothing, if start button hasn't been clicked and hasn't changed it's value to 'Pause'
-	if (startBtn === undefined || startBtn.value === 'Start')
+    let startBtn = document.querySelector("#start");
+    // Do nothing, if start button hasn't been clicked and hasn't changed it's value to 'Pause'
+    if (startBtn === undefined || startBtn.value === 'Start')
         return
-        
+
     if (!theObject) {
         theObject = document.querySelector('#mainObject');
         initialLeft = theObject.getBoundingClientRect().left - theObject.getBoundingClientRect().width / 2;
@@ -121,87 +121,101 @@ function getPosition(element) {
     };
 }
 
+
 // Simulation UAVs
 class UAV {
-  constructor(id, x, y, angle, speed, field) {
-    this.id = id;
-    this.obj = document.querySelector("#uav"+id);
-    this.obj.style.position = "absolute";
-    this.angleini = angle;
-    this.angle = angle;
-    this.xini = x;
-    this.yini = y;
-    this.x = x;
-    this.y = y;
-    this.update();
-    this.speed = speed;
-    this.up_bound = 2 * Math.PI;
-    this.low_bound = -this.up_bound;
-    this.border = Math.max(this.obj.clientHeight / 2, this.obj.clientWidth / 2)
-    this.field = field;
-    this.height = this.field.clientHeight - this.border;
-    this.width = this.field.clientWidth - this.border;
-    this.index = 0;
-    this.radius = 15;
-  }
-
-  reset() {
-    this.x = this.xini;
-    this.y = this.yini;
-    this.angle = this.angleini;
-    this.update();
-  }
-
-  update() {
-    this.obj.style.top = this.y - (this.obj.clientHeight / 2) + 'px';
-    this.obj.style.left = this.x - (this.obj.clientWidth / 2) + 'px';
-  }
-
-  move(offset, uavs) {
-    this.angle += offset;
-    if (this.angle > this.up_bound) {
-        this.angle -= this.up_bound;
-    } else if (this.angle < this.low_bound) {
-        this.angle += this.low_bound;
-    }
-    let xx = Math.cos(this.angle) * this.speed;
-    let yy = Math.sin(this.angle) * this.speed;
-    this.x = Math.max(this.border, Math.min(this.width, this.x + xx));
-    this.y = Math.max(this.border, Math.min(this.height, this.y + yy));
-    this.update();
-    //console.log(this.angle + " " + this.x + "," + this.y);
-    // bouncing from borders
-    if (this.x <= this.border || this.x >= this.width || this.y <= this.border || this.y >= this.height) {
-        this.angle = this.angle + Math.PI;
+    constructor(id, x, y, angle, speed, field) {
+        this.id = id;
+        this.obj = document.querySelector("#uav"+id);
+        this.obj.style.position = "absolute";
+        this.angleini = angle;
+        this.angle = angle;
+        this.xini = x;
+        this.yini = y;
+        this.x = x;
+        this.y = y;
+        this.update();
+        this.speed = speed;
+        this.up_bound = 2 * Math.PI;
+        this.low_bound = -this.up_bound;
+        this.border = Math.max(this.obj.clientHeight / 2, this.obj.clientWidth / 2)
+        this.field = field;
+        this.height = this.field.clientHeight - this.border;
+        this.width = this.field.clientWidth - this.border;
+        this.index = 0;
+        this.radius = 15;
     }
 
-    // collision
-	for (let i = 0; i < uavs.length; i++) {
-		if (uavs[i] != null && this !== uavs[i]) { // not to process itself
-			let dx = this.x - uavs[i].x;
-			let dy = this.y - uavs[i].y;
-			let distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-			let margin = 15;
-
-			if (distance < this.radius * 2 + margin) {
-				this.angle = this.angle + Math.PI;
-			//	this.obj.style.border = '1px solid red';
-			}
-		}
+    reset() {
+        this.x = this.xini;
+        this.y = this.yini;
+        this.angle = this.angleini;
+        this.update();
     }
-    // if Intruder is detected by UAVs, the simulation is over
-    let Indx = theObject.xPosition - uavs[i].x;
-    let Indy = theObject.yPosition - uavs[i].y;
-    let InDistance = Math.sqrt(Indx * Indx + Indy * Indy);
 
-    if (InDistance < theObjectRadius + this.radius) {
-        alert("Simulation is over.");
-        clearInterval(timer); // finish the animation
-        combo.disabled = false;
-        btn.disabled = true;
-        return;
+    update() {
+        this.obj.style.top = this.y - (this.obj.clientHeight / 2) + 'px';
+        this.obj.style.left = this.x - (this.obj.clientWidth / 2) + 'px';
     }
-  }
+
+    move(offset, uavs) {
+        this.angle += offset;
+        if (this.angle > this.up_bound) {
+            this.angle -= this.up_bound;
+        } else if (this.angle < this.low_bound) {
+            this.angle += this.low_bound;
+        }
+        let xx = Math.cos(this.angle) * this.speed;
+        let yy = Math.sin(this.angle) * this.speed;
+        this.x = Math.max(this.border, Math.min(this.width, this.x + xx));
+        this.y = Math.max(this.border, Math.min(this.height, this.y + yy));
+        this.update();
+        //console.log(this.angle + " " + this.x + "," + this.y);
+        // bouncing from borders
+        if (this.x <= this.border || this.x >= this.width || this.y <= this.border || this.y >= this.height) {
+            this.angle = this.angle + Math.PI;
+        }
+
+        // collision
+        for (let i = 0; i < uavs.length; i++) {
+            if (uavs[i] != null && this !== uavs[i]) { // not to process itself
+                let dx = this.x - uavs[i].x;
+                let dy = this.y - uavs[i].y;
+                let distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+                let margin = 15;
+
+                if (distance < this.radius * 2 + margin) {
+                    this.angle = this.angle + Math.PI;
+                    //	this.obj.style.border = '1px solid red';
+                }
+            }
+        }
+        // if Intruder is detected by UAVs, the simulation is over
+        if (!theObject) {
+            theObject = document.querySelector('#mainObject');
+            initialLeft = theObject.getBoundingClientRect().left - theObject.getBoundingClientRect().width / 2;
+            initialTop = theObject.getBoundingClientRect().top - theObject.getBoundingClientRect().height / 2;
+        }
+
+        const fieldBounding = document.getElementById("field").getBoundingClientRect();
+        const fieldLeft = fieldBounding.left;
+
+        const objectBounding = theObject.getBoundingClientRect();
+        const objectTop = objectBounding.top;
+        const objectLeft = objectBounding.left;
+
+        let Indx = objectLeft - fieldLeft - uavs[i].x;
+        let Indy = objectTop - uavs[i].y;
+        let InDistance = Math.sqrt(Indx * Indx + Indy * Indy);
+
+        if (InDistance < theObjectRadius + this.radius) {
+            alert("Simulation is over.");
+            clearInterval(timer); // finish the animation
+            combo.disabled = false;
+            btn.disabled = true;
+            return;
+        }
+    }
 }
 
 
@@ -217,14 +231,14 @@ const init1  = [[ 0,  0, 0]];
 const init2  = [[-1,  0, PI], [1, 0, 0]];
 const init4  = [[-1, -1, -PI_34], [1, -1, -PI_4], [-1, 1, PI_34], [1, 1, PI_4]];
 const init8  = [[-1, -1, -PI_34], [1, -1, -PI_4], [-1, 1, PI_34], [1, 1, PI_4],
-                [-3, -1, PI],     [3, -1, 0],     [-3, 1, PI],    [3, 1, 0]];
+    [-3, -1, PI],     [3, -1, 0],     [-3, 1, PI],    [3, 1, 0]];
 const init12 = [[-1, -1, -PI_34], [1, -1, -PI_4], [-1, 1, PI_34], [1, 1, PI_4],
-                [-3, -1, PI],     [3, -1, 0],     [-3, 1, PI],    [3, 1, 0],
-                [-1, -3, -PI_2],  [1, -3, -PI_2], [-1, 3, PI_2],  [1, 3, PI_2]];
+    [-3, -1, PI],     [3, -1, 0],     [-3, 1, PI],    [3, 1, 0],
+    [-1, -3, -PI_2],  [1, -3, -PI_2], [-1, 3, PI_2],  [1, 3, PI_2]];
 const init16 = [[-1, -1, -PI_34], [1, -1, -PI_4], [-1, 1, PI_34], [1, 1, PI_4],
-                [-3, -1, PI],     [3, -1, 0],     [-3, 1, PI],    [3, 1, 0],
-                [-1, -3, -PI_2],  [1, -3, -PI_2], [-1, 3, PI_2],  [1, 3, PI_2],
-                [-3, -3, -PI_34], [3, -3, -PI_4], [-3, 3, PI_34], [3, 3, PI_4]];
+    [-3, -1, PI],     [3, -1, 0],     [-3, 1, PI],    [3, 1, 0],
+    [-1, -3, -PI_2],  [1, -3, -PI_2], [-1, 3, PI_2],  [1, 3, PI_2],
+    [-3, -3, -PI_34], [3, -3, -PI_4], [-3, 3, PI_34], [3, 3, PI_4]];
 const inits = [[], init1, init2, [], init4, [], [], [], init8, [], [], [], init12, [], [], [], init16];
 
 let uavs = new Array(16);
@@ -239,23 +253,23 @@ btn.addEventListener('click', function() {
     btn.value = (btn.value == 'Start' ? 'Pause' : 'Start');
     if (btn.value == 'Pause') {
         let start = Date.now(); // remember start time
-		console.log("let the party begin");
-		console.log("uavs: ", uavs);
+        console.log("let the party begin");
+        console.log("uavs: ", uavs);
 
         timer = setInterval(function() {
-        // how much time passed from the start?
-        let timePassed = (Date.now() - start) / 100;
-        updateTimeLabel(timePassed);
+            // how much time passed from the start?
+            let timePassed = (Date.now() - start) / 100;
+            updateTimeLabel(timePassed);
 
-        if (timePassed >= 600) {
-            clearInterval(timer); // finish the animation
-            combo.disabled = false;
-            btn.disabled = true;
-            return;
-        }
+            if (timePassed >= 600) {
+                clearInterval(timer); // finish the animation
+                combo.disabled = false;
+                btn.disabled = true;
+                return;
+            }
 
-        // draw the animation at the moment timePassed
-        draw(timePassed);
+            // draw the animation at the moment timePassed
+            draw(timePassed);
 
         }, 50);
     } else {
@@ -280,8 +294,8 @@ function resetDefaultPos() {
 function draw(timePassed) {
     for (i = 0; i < uavs.length; i++) {
         if (uavs[i] != null) {
-			console.log(`uav_${i} position is being updated, uav object: `);
-			console.log(uavs[i]);
+            console.log(`uav_${i} position is being updated, uav object: `);
+            console.log(uavs[i]);
             let rho = Math.random(); // To be replaced by chaotics
             if (rho < 0.333333) {
                 // right
@@ -319,7 +333,7 @@ function setNumUavs(selectorVal) {
         field.appendChild(uavImg);
         uavs[i] = new UAV(i, x+(space*init[i][0]), y+(space*init[i][1]), init[i][2], speed, field);
     }
-	console.log(`${selectorVal} uavs successfully initialized`);
+    console.log(`${selectorVal} uavs successfully initialized`);
 }
 
 function updateTimeLabel(time) {
